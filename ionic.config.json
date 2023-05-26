@@ -1,0 +1,7 @@
+{
+  "name": "app-mongo",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "vue-vite"
+}
