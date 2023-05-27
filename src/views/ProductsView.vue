@@ -1,45 +1,12 @@
 <template>
   <ion-content>
+    <insert v-bind:agregarProducto="agregarProducto"></insert>
     <ion-card>
-      <ion-button @click="insert">Agregar</ion-button>
-      <insert class="agregarProducto"></insert>
+      <ion-button id="openModal" @click="agregarProducto = true"
+        >Agregar</ion-button
+      >
     </ion-card>
-    <v-dialog>
-      <ion-card>
-        <ion-card-title>Insertar un nuevo Producto</ion-card-title>
-        <ion-card-header>
-          <ion-list>
-            <ion-item>
-              <ion-label position="floating">Nombre</ion-label>
-              <ion-input v-model="nombre"></ion-input>
-            </ion-item>
-            <ion-item>
-              <ion-label position="floating">Categoría</ion-label>
-              <ion-input v-model="categoria"></ion-input>
-            </ion-item>
-            <ion-item>
-              <ion-label position="floating">Resumen</ion-label>
-              <ion-input v-model="resumen"></ion-input>
-            </ion-item>
-            <ion-item>
-              <ion-label position="floating">Descripción</ion-label>
-              <ion-input v-model="descripcion"></ion-input>
-            </ion-item>
-            <ion-item>
-              <ion-label position="floating">Imagen (Link)</ion-label>
-              <ion-input v-model="imagenArchivo"></ion-input>
-            </ion-item>
-            <ion-item>
-              <ion-label position="floating">Precio</ion-label>
-              <ion-input v-model="precio" type="number"></ion-input>
-            </ion-item>
-          </ion-list>
-        </ion-card-header>
-        <ion-card-content>
-          <ion-button expand="full" @click="submitForm">Guardar</ion-button>
-        </ion-card-content>
-      </ion-card>
-    </v-dialog>
+
     <div
       v-for="(products, index) in grupoProductos"
       :key="index"
@@ -64,13 +31,19 @@
           <ion-button color="danger" @click="eliminar(product.id)"
             >Eliminar</ion-button
           >
-          <ion-button color="success" @click="dialogoActualizar(product)"
+          <ion-button
+            id="openUpdate"
+            color="success"
+            @click="dialogoActualizar(product)"
             >Actualizar</ion-button
           >
         </ion-card-content>
       </ion-card>
     </div>
-    <v-dialog v-model="dialogo">
+    <ion-modal
+      :is-open="openUpdate"
+      backdrop-dismiss="false"
+    >
       <ion-card>
         <ion-card-title>Actualizar el Producto</ion-card-title>
         <ion-card-header>
@@ -107,7 +80,7 @@
           >
         </ion-card-content>
       </ion-card>
-    </v-dialog>
+    </ion-modal>
   </ion-content>
 </template>
 <script>
@@ -145,7 +118,8 @@ export default {
   data() {
     return {
       products: [],
-      agregarProducto: false,
+      openModal: false,
+      openUpdate: false,
       id: "",
       nombre: "",
       categoria: "",
@@ -216,10 +190,8 @@ export default {
         console.error(error);
       }
     },
-    insert() {
-      this.agregarProducto = true
-    },
     dialogoActualizar(products) {
+      this.openUpdate = true,
       (this.form.id = products.id),
         (this.form.categoria = products.categoria),
         (this.form.descripcion = products.descripcion),

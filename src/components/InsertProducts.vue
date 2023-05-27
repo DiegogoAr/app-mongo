@@ -1,5 +1,5 @@
 <template>
-    <ion-modal>
+    <ion-modal trigger="openModal" backdrop-dismiss="false">
       <ion-card>
         <ion-card-header>
           <ion-list>
@@ -91,13 +91,16 @@ export default {
         console.log(data);
         if (response.ok) {
           alert("Se insertó");
-          
+          window.location.reload();
         } else {
           throw new Error("Se tuvo un error en la solicitud.");
         }
       } catch (error) {
         console.error(error);
       }
+    },
+    cerrar() {
+      this.$emit('dismiss')    
     },
   },
 };
